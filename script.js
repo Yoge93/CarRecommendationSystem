@@ -75,99 +75,50 @@ function selectCarType(selectedCarType) {
     document.getElementById('loading').style.display = 'block';
     // Update progress bar to 85%
     updateProgressBar(85);
-    
-    // Simulate fetching recommendations
-    setTimeout(function() {
-        const recommendations = {
-            "urban": {
-                "sedan": [
-                    "Honda City",
-                    "Maruti Suzuki Dzire",
-                    "Hyundai Verna"
-                ],
-                "suv": [
-                    "Tata Nexon",
-                    "Hyundai Creta",
-                    "Mahindra XUV300"
-                ],
-                "hatchback": [
-                    "Maruti Suzuki Swift",
-                    "Hyundai Grand i10",
-                    "Tata Tiago"
-                ]
-            },
-            "semi-urban": {
-                "sedan": [
-                    "Maruti Suzuki Swift",
-                    "Honda Amaze",
-                    "Toyota Yaris"
-                ],
-                "suv": [
-                    "Mahindra Thar",
-                    "Tata Harrier",
-                    "Ford Ecosport"
-                ],
-                "hatchback": [
-                    "Maruti Suzuki Alto",
-                    "Honda Brio",
-                    "Renault Kwid"
-                ]
-            },
-            "tier-2": {
-                "sedan": [
-                    "Honda City",
-                    "Maruti Suzuki Dzire",
-                    "Hyundai Verna"
-                ],
-                "suv": [
-                    "Mahindra XUV500",
-                    "Tata Nexon",
-                    "Hyundai Creta"
-                ],
-                "hatchback": [
-                    "Maruti Suzuki Swift",
-                    "Hyundai i20",
-                    "Ford Figo"
-                ]
-            },
-            "metropolitan": {
-                "sedan": [
-                    "BMW 3 Series",
-                    "Audi A4",
-                    "Mercedes-Benz C-Class"
-                ],
-                "suv": [
-                    "BMW X5",
-                    "Mercedes-Benz GLC",
-                    "Audi Q5"
-                ],
-                "hatchback": [
-                    "Volkswagen Polo",
-                    "Hyundai i10",
-                    "Honda Jazz"
-                ]
-            }
-        };
 
+    // Send the user data to the backend
+    fetch('http://localhost:5000/recommend-cars', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ city, carType })
+    })
+    .then(response => response.json())
+    .then(data => {
         // Hide loading animation and show results
         document.getElementById('loading').style.display = 'none';
         const resultDiv = document.getElementById('result');
         const carList = document.getElementById('carList');
         carList.innerHTML = ''; // Clear previous results
-        const carRecommendations = recommendations[city][carType];
 
-        if (carRecommendations) {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        if (data.length > 0) {
             resultDiv.style.display = 'block';
-            carRecommendations.forEach(car => {
+            data.forEach(car => {
                 const li = document.createElement('li');
-                li.textContent = car;
+                li.textContent = `${car.make} ${car.model}`;
                 carList.appendChild(li);
             });
+        } else {
+            resultDiv.style.display = 'block';
+            const li = document.createElement('li');
+            li.textContent = 'No car recommendations found for this selection.';
+            carList.appendChild(li);
         }
 
         // Update progress bar to 100%
         updateProgressBar(100);
-    }, 1500); // Simulated loading delay
+    })
+    .catch(error => {
+        console.error('Error fetching car recommendations:', error);
+        alert('Something went wrong while fetching the car recommendations.');
+        document.getElementById('loading').style.display = 'none';
+    });
 }
 
 // Reset the form for new selection
