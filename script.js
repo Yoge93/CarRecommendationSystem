@@ -77,7 +77,7 @@ function selectCarType(selectedCarType) {
     updateProgressBar(85);
 
     // Send the user data to the backend
-    fetch('http://localhost:8080/recommend-cars', {
+    fetch('http://localhost:5000/recommend-cars', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
