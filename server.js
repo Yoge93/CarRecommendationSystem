@@ -3,7 +3,7 @@ const axios = require('axios');
 const cors = require('cors'); // Import CORS
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Enable CORS - This allows the frontend to communicate with the backend
 app.use(cors()); // Allow all origins by default. You can specify origins if needed.
