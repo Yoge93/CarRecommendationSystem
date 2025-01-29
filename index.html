@@ -1,56 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Recommendation System</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Recommendation System</title>
+  <script src="app.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    label {
+      font-weight: bold;
+    }
+    select, input, button {
+      margin: 5px 0;
+      padding: 8px;
+      width: 100%;
+      max-width: 300px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Car Recommendation System</h1>
 
-        <!-- User details form -->
-        <div id="userForm">
-            <h2>Enter Your Details</h2>
-            <form id="detailsForm">
-                <input type="text" id="firstName" placeholder="First Name" required>
-                <input type="text" id="lastName" placeholder="Last Name" required>
-                <input type="text" id="mobileNumber" placeholder="Mobile Number" required>
-                <button type="submit">Next</button>
-            </form>
-        </div>
+  <h1>Car Recommendation System</h1>
 
-        <!-- Car preferences form -->
-        <div id="carForm" style="display:none;">
-            <h2>Choose Your Car Preferences</h2>
-            <form id="preferencesForm">
-                <select id="city" required>
-                    <option value="" disabled selected>Select your City</option>
-                    <option value="Delhi">Delhi</option>
-                    <option value="Mumbai">Mumbai</option>
-                    <option value="Bangalore">Bangalore</option>
-                    <option value="Chennai">Chennai</option>
-                </select>
+  <div>
+    <label for="make">Select Car Make:</label>
+    <select id="make">
+      <option value="">-- Select Make --</option>
+    </select>
+  </div>
 
-                <select id="carType" required>
-                    <option value="" disabled selected>Select Car Type</option>
-                    <option value="sedan">Sedan</option>
-                    <option value="suv">SUV</option>
-                    <option value="hatchback">Hatchback</option>
-                </select>
+  <div>
+    <label for="model">Select Model:</label>
+    <select id="model">
+      <option value="">-- Select Model --</option>
+    </select>
+  </div>
 
-                <button type="submit">Get Recommendations</button>
-            </form>
-        </div>
+  <div>
+    <label for="year">Select Year:</label>
+    <select id="year">
+      <option value="">-- Select Year --</option>
+      <!-- You can populate this dynamically if needed -->
+      <option value="2023">2023</option>
+      <option value="2022">2022</option>
+      <option value="2021">2021</option>
+      <option value="2020">2020</option>
+      <!-- Add more years as required -->
+    </select>
+  </div>
 
-        <!-- Display car recommendations -->
-        <div id="carRecommendations" style="display:none;">
-            <h2>Recommended Cars</h2>
-            <ul id="carsList"></ul>
-        </div>
-    </div>
+  <div>
+    <label for="email">Enter Email:</label>
+    <input type="email" id="email" placeholder="Enter your email" />
+  </div>
 
-    <script src="script.js"></script>
+  <button id="getRecommendationsButton">Get Recommendations</button>
+
+  <div id="recommendationsList">
+    <h2>Recommendations:</h2>
+    <ul></ul>
+  </div>
+
 </body>
 </html>
