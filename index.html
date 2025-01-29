@@ -3,63 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Car Recommendation System</title>
+    <title>Car Recommendation System</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <div class="container">
-        <h1>Find Your Perfect Car</h1>
-        
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div id="progress-bar" class="progress-bar"></div>
-        </div>
-
-        <!-- First Step: Name and Mobile Collection -->
+    <div id="container">
+        <!-- Step 1: User Info -->
         <div id="step1" class="step">
-            <h2>Tell us about yourself</h2>
-            <input type="text" id="firstName" placeholder="First Name" class="input-field" required />
-            <input type="text" id="lastName" placeholder="Last Name" class="input-field" required />
-            <input type="text" id="mobile" placeholder="Mobile Number" class="input-field" required />
-            <button class="btn" onclick="nextStep()">Next</button>
+            <h2>Welcome! Please provide your details</h2>
+            <form>
+                <input type="text" id="firstName" placeholder="First Name" required><br>
+                <input type="text" id="lastName" placeholder="Last Name" required><br>
+                <input type="text" id="mobile" placeholder="Mobile Number" required><br>
+                <button type="button" onclick="nextStep()">Next</button>
+            </form>
         </div>
 
-        <!-- Second Step: City Selection -->
-        <div id="step2" class="step" style="display: none;">
+        <!-- Step 2: City Selection -->
+        <div id="step2" class="step" style="display:none;">
             <h2>Where do you live?</h2>
-            <div class="options">
-                <div class="option" onclick="selectCity('urban')">Urban City</div>
-                <div class="option" onclick="selectCity('semi-urban')">Semi-Urban / Rural</div>
-                <div class="option" onclick="selectCity('tier-2')">Tier-2 City</div>
-                <div class="option" onclick="selectCity('metropolitan')">Metropolitan City</div>
-            </div>
+            <button type="button" onclick="selectCity('urban')">Urban</button>
+            <button type="button" onclick="selectCity('semi-urban')">Semi-Urban</button>
+            <button type="button" onclick="selectCity('tier-2')">Tier-2</button>
+            <button type="button" onclick="selectCity('metropolitan')">Metropolitan</button>
         </div>
 
-        <!-- Third Step: Car Type Selection -->
-        <div id="step3" class="step" style="display: none;">
-            <h2>What type of car do you prefer?</h2>
-            <div class="options">
-                <div class="option" onclick="selectCarType('sedan')">Sedan</div>
-                <div class="option" onclick="selectCarType('suv')">SUV</div>
-                <div class="option" onclick="selectCarType('hatchback')">Hatchback</div>
-            </div>
+        <!-- Step 3: Car Type Selection -->
+        <div id="step3" class="step" style="display:none;">
+            <h2>What type of car are you looking for?</h2>
+            <button type="button" onclick="selectCarType('sedan')">Sedan</button>
+            <button type="button" onclick="selectCarType('suv')">SUV</button>
+            <button type="button" onclick="selectCarType('hatchback')">Hatchback</button>
         </div>
 
         <!-- Loading Indicator -->
-        <div id="loading" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            Loading...
+        <div id="loading" style="display:none;">
+            <p>Loading...</p>
         </div>
 
-        <!-- Results Section -->
-        <div id="result" class="result" style="display: none;">
-            <h2>Recommended Cars:</h2>
+        <!-- Result -->
+        <div id="result" style="display:none;">
+            <h2>Recommended Cars</h2>
             <ul id="carList"></ul>
-            <button class="btn" onclick="resetForm()">Try Again</button>
         </div>
-    </div>
 
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+
+        <!-- Reset Button -->
+        <button type="button" onclick="resetForm()">Start Over</button>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
