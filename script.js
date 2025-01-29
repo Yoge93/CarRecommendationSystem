@@ -16,7 +16,7 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
     const mobileNumber = document.getElementById('mobileNumber').value;
 
     // Make the API request to the backend
-    fetch('https://your-backend-url.railway.app/recommend-cars', {
+    fetch('http://localhost:5000/recommend-cars', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
 
         data.forEach(car => {
             const li = document.createElement('li');
-            li.textContent = `${car.title} (${car.category})`;
+            li.textContent = `${car.make} - ${car.models.map(model => model.Name).join(", ")}`;
             carsList.appendChild(li);
         });
     })
