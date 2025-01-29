@@ -1,10 +1,13 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors'); // Import cors
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware to parse incoming JSON requests
+// Enable CORS
+app.use(cors()); // This will allow all origins, you can restrict it to specific origins if needed.
+
 app.use(express.json());
 
 // Route to handle car recommendations based on user input
