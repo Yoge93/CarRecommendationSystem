@@ -4,7 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 
 // Enable CORS
 app.use(cors());
@@ -13,9 +13,11 @@ app.use(cors());
 app.use(express.json());
 
 // Endpoint to get car recommendations based on city and car type
-app.post('/recommend-cars', async (req, res) => {
-    const { city, carType } = req.body;
-
+app.get('/recommendcars', async (req, res) => {
+    
+    const city = req.query.city;
+    const carType = req.query.carType;
+    console.log("in", city, carType)
     if (!city || !carType) {
         return res.status(400).json({ error: 'City and Car Type are required.' });
     }
@@ -26,12 +28,12 @@ app.post('/recommend-cars', async (req, res) => {
         const makes = makesResponse.data.Results;
 
         // Filter makes based on car type (you can enhance this logic)
-        const filteredMakes = makes.filter(make => make.MakeName.toLowerCase().includes(carType.toLowerCase()));
+        const filteredMakes = makes.filter(make => make.Make_Name.toLowerCase().includes(carType.toLowerCase()));
 
         // Get models of the selected car type from NHTSA API (filter by make)
         const carModelsPromises = filteredMakes.map(async (make) => {
-            const modelsResponse = await axios.get(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.MakeName}?format=json`);
-            return { make: make.MakeName, models: modelsResponse.data.Results };
+            const modelsResponse = await axios.get(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.Make_Name}?format=json`);
+            return { make: make.Make_Name, models: modelsResponse.data.Results };
         });
 
         const carModels = await Promise.all(carModelsPromises);
@@ -46,5 +48,5 @@ app.post('/recommend-cars', async (req, res) => {
 
 // Start the backend server on the specified port
 app.listen(PORT, () => {
-    console.log(`Backend is running on port ${PORT}`);
+    console.log(`Backend is running on port http://localhost:${PORT}`);
 });
