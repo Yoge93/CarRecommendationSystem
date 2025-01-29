@@ -1,4 +1,3 @@
-// Import required modules
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
@@ -7,19 +6,22 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// CORS configuration to allow the frontend to access the backend
-const allowedOrigins = ['https://yourfrontend-url.railway.app']; // Replace with your actual frontend URL
+// CORS Configuration - Allow only frontend URL
+const allowedOrigins = [
+    'https://yourfrontend-url.railway.app',  // Replace this with your frontend URL
+    'http://localhost:3000'                  // You can also add local URL for local development
+];
 
 app.use(cors({
     origin: function (origin, callback) {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true); // Allow the request if it's from an allowed origin
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true); // Allow the request from allowed origins
         } else {
             callback(new Error('Not allowed by CORS'));
         }
     },
     methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type']
 }));
 
 app.use(express.json());
@@ -33,7 +35,7 @@ app.post('/recommend-cars', async (req, res) => {
     }
 
     try {
-        // Fetch car data from an external API
+        // Fetch car data from an external API (e.g., CarQuery API)
         const response = await axios.get('https://www.carqueryapi.com/api/0.3/?cmd=getModels&make=all&year=2020&sold_in_india=1');
         const cars = response.data.models;
 
@@ -50,5 +52,5 @@ app.post('/recommend-cars', async (req, res) => {
 
 // Start the server on the specified port
 app.listen(PORT, () => {
-    console.log(`Backend running on port ${PORT}`);
+    console.log(`Backend is running on port ${PORT}`);
 });
