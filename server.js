@@ -5,8 +5,8 @@ const cors = require('cors'); // Import CORS
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS - Allow all origins by default
-app.use(cors()); 
+// Enable CORS to allow cross-origin requests from frontend
+app.use(cors());
 
 app.use(express.json());
 
@@ -26,10 +26,11 @@ app.post('/recommend-cars', async (req, res) => {
         // Filter the cars based on car type (Sedan, SUV, Hatchback)
         const filteredCars = cars.filter(car => car.body.toLowerCase() === carType.toLowerCase());
 
+        // Return the filtered cars
         res.json(filteredCars);
     } catch (error) {
         console.error('Error fetching data from CarQuery API:', error);
-        res.status(500).json({ error: 'Failed to fetch car data.' });
+        res.status(500).json({ error: 'Failed to fetch car data from CarQuery API.' });
     }
 });
 
