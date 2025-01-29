@@ -9,6 +9,17 @@ function updateProgressBar(percentage) {
     document.getElementById('progress-bar').style.width = `${percentage}%`;
 }
 
+// Regex Validation Functions
+function validateName(name) {
+    const regex = /^[A-Za-z\s]+$/; // Name can only contain letters and spaces
+    return regex.test(name);
+}
+
+function validateMobile(mobile) {
+    const regex = /^[789]\d{9}$/; // Valid Indian mobile number format
+    return regex.test(mobile);
+}
+
 // Handle moving to the next step after collecting name and mobile
 function nextStep() {
     firstName = document.getElementById('firstName').value;
@@ -18,6 +29,23 @@ function nextStep() {
     // Validate inputs
     if (!firstName || !lastName || !mobile) {
         alert("Please fill in all fields.");
+        return;
+    }
+
+    // Validate Name fields
+    if (!validateName(firstName)) {
+        alert("Please enter a valid first name (letters and spaces only).");
+        return;
+    }
+
+    if (!validateName(lastName)) {
+        alert("Please enter a valid last name (letters and spaces only).");
+        return;
+    }
+
+    // Validate Mobile Number
+    if (!validateMobile(mobile)) {
+        alert("Please enter a valid mobile number (starting with 7, 8, or 9 and 10 digits long).");
         return;
     }
 
