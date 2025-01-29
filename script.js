@@ -1,89 +1,45 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const makeSelect = document.getElementById('make');
-  const modelSelect = document.getElementById('model');
-  const yearSelect = document.getElementById('year');
-  const emailInput = document.getElementById('email');
-  const recommendationButton = document.getElementById('getRecommendationsButton');
-  const recommendationsList = document.getElementById('recommendationsList');
+document.getElementById('detailsForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    document.getElementById('userForm').style.display = 'none';
+    document.getElementById('carForm').style.display = 'block';
+});
 
-  // Fetch available makes when the page loads
-  fetchMakes();
+document.getElementById('preferencesForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-  recommendationButton.addEventListener('click', () => {
-    if (validateForm()) {
-      handleRecommendation();
-    }
-  });
+    const city = document.getElementById('city').value;
+    const carType = document.getElementById('carType').value;
 
-  // Form validation for email
-  function validateForm() {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailInput.value) {
-      alert('Email is required.');
-      return false;
-    }
-    if (!emailRegex.test(emailInput.value)) {
-      alert('Invalid email format.');
-      return false;
-    }
-    return true;
-  }
+    // Get user details
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const mobileNumber = document.getElementById('mobileNumber').value;
 
-  // Fetch available car makes from Car Query API
-  async function fetchMakes() {
-    try {
-      const response = await fetch('https://www.carqueryapi.com/api/0.3/?cmd=getMakes');
-      const data = await response.json();
-      populateMakes(data.Makes);
-    } catch (error) {
-      console.error('Error fetching makes:', error);
-    }
-  }
+    // Make the API request to the backend
+    fetch('https://your-backend-url.railway.app/recommend-cars', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ city, carType })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display the car recommendations
+        document.getElementById('carForm').style.display = 'none';
+        document.getElementById('carRecommendations').style.display = 'block';
+        
+        const carsList = document.getElementById('carsList');
+        carsList.innerHTML = ''; // Clear previous results
 
-  // Populate make select dropdown
-  function populateMakes(makes) {
-    makes.forEach(make => {
-      const option = document.createElement('option');
-      option.value = make.make_id;
-      option.textContent = make.make_display;
-      makeSelect.appendChild(option);
+        data.forEach(car => {
+            const li = document.createElement('li');
+            li.textContent = `${car.title} (${car.category})`;
+            carsList.appendChild(li);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching car recommendations:', error);
+        alert('There was an error fetching the recommendations. Please try again.');
     });
-  }
-
-  // Handle car recommendation fetch from API
-  async function handleRecommendation() {
-    const make = makeSelect.value;
-    const model = modelSelect.value;
-    const year = yearSelect.value;
-
-    if (!make || !model || !year) {
-      alert('Please select make, model, and year.');
-      return;
-    }
-
-    try {
-      const response = await fetch(`https://www.carqueryapi.com/api/0.3/?cmd=getModels&make_id=${make}`);
-      const data = await response.json();
-      const models = data.Models.filter(item => item.model_name.toLowerCase() === model.toLowerCase());
-      
-      if (models.length === 0) {
-        recommendationsList.innerHTML = '<p>No recommendations found.</p>';
-        return;
-      }
-
-      displayRecommendations(models);
-    } catch (error) {
-      console.error('Error fetching recommendations:', error);
-    }
-  }
-
-  // Display recommended cars
-  function displayRecommendations(cars) {
-    recommendationsList.innerHTML = ''; // Clear existing recommendations
-    cars.forEach(car => {
-      const listItem = document.createElement('li');
-      listItem.textContent = `${car.model_name} (${car.model_year})`;
-      recommendationsList.appendChild(listItem);
-    });
-  }
 });
