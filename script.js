@@ -16,12 +16,11 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
     const mobileNumber = document.getElementById('mobileNumber').value;
 
     // Make the API request to the backend
-    fetch('http://localhost:5000/recommend-cars', {
-        method: 'POST',
+    fetch(`http://localhost:3000/recommendcars?city=${city}&carType=${carType}`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ city, carType })
+        }
     })
     .then(response => response.json())
     .then(data => {
