@@ -1,32 +1,18 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+require('dotenv').config();
 
-// Initialize the Express application
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configure CORS to allow requests from the frontend
-const allowedOrigins = [
-    'https://yourfrontend-url.railway.app',  // Replace with your actual frontend URL
-    'http://localhost:3000',                 // Local development URL
-];
+// Enable CORS
+app.use(cors());
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true); // Allow the request if it's from an allowed origin
-        } else {
-            callback(new Error('Not allowed by CORS')); // Reject if not allowed
-        }
-    },
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
-}));
+// Middleware to parse JSON
+app.use(express.json());
 
-app.use(express.json()); // For parsing application/json
-
-// Endpoint to recommend cars based on the user's city and car type
+// Endpoint to get car recommendations based on city and car type
 app.post('/recommend-cars', async (req, res) => {
     const { city, carType } = req.body;
 
@@ -35,19 +21,25 @@ app.post('/recommend-cars', async (req, res) => {
     }
 
     try {
-        // Fetch product data from the third-party API (FakeStoreAPI)
-        const response = await axios.get('https://fakestoreapi.com/products');
-        const products = response.data;
+        // Request to NHTSA API for vehicle makes (this is just an example)
+        const makesResponse = await axios.get('https://vpic.nhtsa.dot.gov/api/vehicles/getallmakes?format=json');
+        const makes = makesResponse.data.Results;
 
-        // Filter products based on the car type (SUV, Sedan, Hatchback)
-        const filteredCars = products.filter(product => {
-            return product.category.toLowerCase() === carType.toLowerCase();
+        // Filter makes based on car type (you can enhance this logic)
+        const filteredMakes = makes.filter(make => make.MakeName.toLowerCase().includes(carType.toLowerCase()));
+
+        // Get models of the selected car type from NHTSA API (filter by make)
+        const carModelsPromises = filteredMakes.map(async (make) => {
+            const modelsResponse = await axios.get(`https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/${make.MakeName}?format=json`);
+            return { make: make.MakeName, models: modelsResponse.data.Results };
         });
 
-        // Return the filtered list of cars
-        res.json(filteredCars);
+        const carModels = await Promise.all(carModelsPromises);
+
+        // Return filtered car models
+        res.json(carModels);
     } catch (error) {
-        console.error('Error fetching data from third-party API:', error);
+        console.error('Error fetching data from NHTSA API:', error);
         res.status(500).json({ error: 'Failed to fetch car data.' });
     }
 });
