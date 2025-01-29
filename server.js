@@ -1,12 +1,12 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors'); // Import cors
+const cors = require('cors'); // Import CORS
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS
-app.use(cors()); // This will allow all origins, you can restrict it to specific origins if needed.
+// Enable CORS - This allows the frontend to communicate with the backend
+app.use(cors()); // Allow all origins by default. You can specify origins if needed.
 
 app.use(express.json());
 
@@ -20,7 +20,7 @@ app.post('/recommend-cars', async (req, res) => {
 
     try {
         // Call the CarQuery API to get car data
-        const response = await axios.get(`https://www.carqueryapi.com/api/0.3/?cmd=getModels&make=all&year=2020&sold_in_india=1`);
+        const response = await axios.get('https://www.carqueryapi.com/api/0.3/?cmd=getModels&make=all&year=2020&sold_in_india=1');
         const cars = response.data.models;
 
         // Filter the cars based on car type (Sedan, SUV, Hatchback)
