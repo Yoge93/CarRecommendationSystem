@@ -44,7 +44,7 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
 
             // Adding the car's image (optional, you can add URLs for each car)
     document.getElementById('carForm').style.display = 'block';
-            const carImage = 'https://images.unsplash.com/photo-1599444123004-5638d3d06d0c'
+            const carImage = 'https://images.pexels.com/photos/1284627/pexels-photo-1284627.jpeg'; // New SUV image
 
 
             card.innerHTML = `
