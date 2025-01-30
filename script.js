@@ -15,6 +15,10 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
     const lastName = document.getElementById('lastName').value;
     const mobileNumber = document.getElementById('mobileNumber').value;
 
+    // Show a loading spinner while waiting for results
+    const carsList = document.getElementById('carsList');
+    carsList.innerHTML = `<div class="loading-spinner">Loading car recommendations...</div>`;
+
     // Make the API request to the backend
     fetch(`http://localhost:3000/recommendcars?city=${city}&carType=${carType}`, {
         method: 'GET',
@@ -24,25 +28,30 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
     })
     .then(response => response.json())
     .then(data => {
-        // Display the car recommendations
+        // Remove the loading spinner and show recommendations
+        carsList.innerHTML = '';
+
         document.getElementById('carForm').style.display = 'none';
         document.getElementById('carRecommendations').style.display = 'block';
 
-        const carsList = document.getElementById('carsList');
-        carsList.innerHTML = ''; // Clear previous results
-
         // Loop through car makes and models
         data.forEach(car => {
-            const li = document.createElement('li');
+            const card = document.createElement('div');
+            card.classList.add('car-card', 'fadeIn');
 
-            // Prepare the car model names string
+            // Prepare the model names
             const modelNames = car.models.map(model => model.Model_Name).join(", ");
-            
-            // Create the list item with car name and models
-            li.innerHTML = `
-                <div class="car-name">${car.make} - ${modelNames}</div>
+
+            // Adding the car's image (optional, you can add URLs for each car)
+            const carImage = 'https://via.placeholder.com/250x150.png?text=Car+Image'; // Placeholder image
+
+            card.innerHTML = `
+                <img src="${carImage}" alt="Car Image">
+                <div class="car-name">${car.make}</div>
+                <div class="model-names">${modelNames}</div>
             `;
-            carsList.appendChild(li);
+
+            carsList.appendChild(card);
         });
     })
     .catch(error => {
