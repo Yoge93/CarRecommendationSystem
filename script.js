@@ -44,7 +44,7 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
 
             // Adding the car's image (optional, you can add URLs for each car)
     document.getElementById('carForm').style.display = 'block';
-            const carImage = 'https://images.pexels.com/photos/1284627/pexels-photo-1284627.jpeg'; // New SUV image
+            const carImage = 'https://www.shutterstock.com/shutterstock/photos/2462850863/display_1500/stock-photo-a-silver-car-standing-in-the-parking-lot-the-sun-reflects-off-the-bodywork-suv-crossover-2462850863.jpg';
 
 
             card.innerHTML = `
