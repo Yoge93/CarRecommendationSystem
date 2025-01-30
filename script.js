@@ -27,13 +27,18 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
         // Display the car recommendations
         document.getElementById('carForm').style.display = 'none';
         document.getElementById('carRecommendations').style.display = 'block';
-        
+
         const carsList = document.getElementById('carsList');
         carsList.innerHTML = ''; // Clear previous results
 
         data.forEach(car => {
             const li = document.createElement('li');
-            li.textContent = `${car.make} - ${car.models.map(model => model.Name).join(", ")}`;
+            const modelNames = car.models.map(model => model.Model_Name).join(", ");
+            
+            // Create list item with model names
+            li.innerHTML = `
+                <div class="car-name">${car.make} - ${modelNames}</div>
+            `;
             carsList.appendChild(li);
         });
     })
