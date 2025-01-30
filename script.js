@@ -43,7 +43,8 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
             const modelNames = car.models.map(model => model.Model_Name).join(", ");
 
             // Adding the car's image (optional, you can add URLs for each car)
-            const carImage = '🚙'
+    document.getElementById('carForm').style.display = 'block';
+            const carImage = 'https://images.unsplash.com/photo-1599444123004-5638d3d06d0c'
 
 
             card.innerHTML = `
