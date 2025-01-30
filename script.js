@@ -31,11 +31,14 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
         const carsList = document.getElementById('carsList');
         carsList.innerHTML = ''; // Clear previous results
 
+        // Loop through car makes and models
         data.forEach(car => {
             const li = document.createElement('li');
+
+            // Prepare the car model names string
             const modelNames = car.models.map(model => model.Model_Name).join(", ");
             
-            // Create list item with model names
+            // Create the list item with car name and models
             li.innerHTML = `
                 <div class="car-name">${car.make} - ${modelNames}</div>
             `;
