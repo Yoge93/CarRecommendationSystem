@@ -1,5 +1,16 @@
 document.getElementById('detailsForm').addEventListener('submit', function(event) {
     event.preventDefault();
+
+    // Mobile number validation (Indian format for example)
+    const mobileNumber = document.getElementById('mobileNumber').value;
+    const mobileNumberPattern = /^[6-9]\d{9}$/; // Regex for Indian mobile numbers (10 digits, starts with 6-9)
+
+    if (!mobileNumberPattern.test(mobileNumber)) {
+        alert('Please enter a valid mobile number.');
+        return; // Exit the function if the validation fails
+    }
+
+    // If validation passes, hide user form and show car preferences form
     document.getElementById('userForm').style.display = 'none';
     document.getElementById('carForm').style.display = 'block';
 });
@@ -43,9 +54,7 @@ document.getElementById('preferencesForm').addEventListener('submit', function(e
             const modelNames = car.models.map(model => model.Model_Name).join(", ");
 
             // Adding the car's image (optional, you can add URLs for each car)
-    document.getElementById('carForm').style.display = 'block';
             const carImage = 'https://www.shutterstock.com/shutterstock/photos/2462850863/display_1500/stock-photo-a-silver-car-standing-in-the-parking-lot-the-sun-reflects-off-the-bodywork-suv-crossover-2462850863.jpg';
-
 
             card.innerHTML = `
                 <img src="${carImage}" alt="Car Image">
